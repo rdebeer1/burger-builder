@@ -84,11 +84,8 @@ class ContactData extends Component {
           ]
         },
         value: 'Pickup',
-        validation: {
-          required: false
-        },
-        valid: true,
-        touched: false
+        validation: {},
+        valid: true
       }
     },
     formIsValid: false,
@@ -180,7 +177,7 @@ class ContactData extends Component {
         ))}
         <Button 
           btnType='Success' 
-          clicked={this.orderHandler}>ORDER</Button>
+          disabled={!this.state.formIsValid}>ORDER</Button>
       </form>
     );
     if (this.state.loading) {
