@@ -16,20 +16,6 @@ class BurgerBuilder extends Component {
     loading: false,
     error: null,
   }
-
-  componentDidMount () {
-    // axios.get('https://burger-builder-e7b7d.firebaseio.com/ingredients.json')
-    // .then(response => {
-    //   this.setState({
-    //     ingredients: response.data
-    //   });
-    // })
-    // .catch(error => {
-    //   this.setState({
-    //     error: true
-    //   })
-    // });
-  }
   
   updatePurchaseState (ingredients) {
     const sum = Object.keys(ingredients).map(igKey => {
@@ -53,16 +39,7 @@ class BurgerBuilder extends Component {
   }
   
   purchaseContinueHandler = () => {
-    const queryParams = [];
-    for (let i in this.state.ingredients) {
-      queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]));
-    }
-    queryParams.push('price=' + this.state.totalPrice);
-    const queryString = queryParams.join('&');
-    this.props.history.push({
-      pathname: '/checkout',
-      search: '?' + queryString
-    })
+    this.props.history.push('/checkout');
   }
 
   render () {
