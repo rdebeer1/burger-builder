@@ -98,7 +98,7 @@ class BurgerBuilder extends Component {
       purchasing: false
     });
   }
-
+  
   purchaseContinueHandler = () => {
     const queryParams = [];
     for (let i in this.state.ingredients) {
