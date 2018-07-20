@@ -13,8 +13,10 @@ import * as actionCreators from '../../store/actions';
 class BurgerBuilder extends Component {
   state = {
     purchasing: false,
-    loading: false,
-    error: null,
+  }
+
+  componentDidMount () {
+    this.props.onInitIngredients();
   }
   
   updatePurchaseState (ingredients) {
@@ -50,7 +52,7 @@ class BurgerBuilder extends Component {
       disabledInfo[key] = disabledInfo[key] <= 0
     }
     let orderSummary = null
-    let burger = this.state.error ? <p>Ingredients couldn't be loaded!</p> : <Spinner />
+    let burger = this.props.error ? <p>Ingredients couldn't be loaded!</p> : <Spinner />
     if (this.props.ings) {
       burger = (
         <Fragment>
@@ -66,12 +68,9 @@ class BurgerBuilder extends Component {
       );
       orderSummary =  <OrderSummary
         ingredients={this.props.ings}
+        price={this.props.price}
         purchasedCancelled={this.purchaseCancelHandler}
-        purchasedContinued={this.purchaseContinueHandler}
-        price={this.props.price} />;
-    }
-    if (this.state.loading) {
-      orderSummary = <Spinner />
+        purchasedContinued={this.purchaseContinueHandler} />;
     }
 
     return (
@@ -84,21 +83,23 @@ class BurgerBuilder extends Component {
         {burger}
       </Fragment>
     );
-  }
-}
+  };
+};
 
 const mapStateToProps = state => {
   return {
     ings: state.ingredients,
-    price: state.totalPrice
+    price: state.totalPrice,
+    error: state.error
   };
-}
+};
 
 const mapDispatchToProps = dispatch => {
     return {
       onIngredientAdded: (ingName) => dispatch(actionCreators.addIngredient(ingName)),
-      onIngredientRemoved: (ingName) => dispatch (actionCreators.removeIngredient(ingName))
+      onIngredientRemoved: (ingName) => dispatch (actionCreators.removeIngredient(ingName)),
+      onInitIngredients: () => dispatch(actionCreators.initIngredients())
     };
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(BurgerBuilder, axios));
