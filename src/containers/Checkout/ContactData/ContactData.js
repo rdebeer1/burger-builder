@@ -6,6 +6,8 @@ import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 import classes from './ContactData.css';
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
+import * as actionCreator from '../../../store/actions';
 
 class ContactData extends Component {
   state = {
@@ -45,7 +47,8 @@ class ContactData extends Component {
         value: '',
         validation: {
           required: true,
-          length: 5
+          length: 5,
+           isNumeric: true
         },
         valid: false,
         touched: false
@@ -71,7 +74,8 @@ class ContactData extends Component {
         },
         value: '',
         validation: {
-          required: true
+          required: true,
+          isEmail: true
         },
         valid: false,
         touched: false
@@ -95,9 +99,6 @@ class ContactData extends Component {
   
   orderHandler = (event) => {
     event.preventDefault();
-    this.setState({
-      loading: true
-    });
     const formData = {};
     for (let formElementIdentifier in this.state.orderForm) {
       formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value;
@@ -107,18 +108,7 @@ class ContactData extends Component {
       price: this.props.price,
       orderData: formData
     }
-    axios.post('/orders.json', order)
-    .then(response => {
-      this.setState({
-        loading: false
-      });
-      this.props.history.push('/');
-    })
-    .catch(error => {
-      this.setState({
-        loading: false
-      });
-    });
+    this.props.onOrderBurger(order);
   }
 
   checkValidity = (value, rules) => {
@@ -130,6 +120,16 @@ class ContactData extends Component {
     if (rules.length) {
       isValid = value.length === rules.length && isValid
     }
+    if (rules.isEmail) {
+      const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+      isValid = pattern.test(value) && isValid
+    }
+
+    if (rules.isNumeric) {
+      const pattern = /^\d+$/;
+      isValid = pattern.test(value) && isValid
+    }
+
     return isValid;
   }
 
@@ -200,4 +200,10 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps)(ContactData);
+const mapDispatchToProps = dispatch => {
+  return {
+    onOrderBurger: (orderData) => dispatch(actionCreator.purchaseBurgerStart(orderData))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ContactData, axios));
