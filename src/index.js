@@ -12,8 +12,8 @@ import burgerBuilderReducer from './store/reducers/burgerBuilder';
 import orderReducer from './store/reducers/order';
 
 const rootReducer = combineReducers({
-  ing: burgerBuilderReducer,
-  odr: orderReducer
+  burgerBuilder: burgerBuilderReducer,
+  order: orderReducer
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

@@ -42,6 +42,7 @@ const setIngredients = (state, action) => {
         cheese: action.ingredients.cheese,
         meat: action.ingredients.meat
       },
+      totalPrice: 1.25,
       error: false
   });
 };
