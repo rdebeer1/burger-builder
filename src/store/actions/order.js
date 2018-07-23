@@ -65,18 +65,18 @@ export const fetchOrders = () => {
   return dispatch => {
     dispatch(fetchOrdersStart());
     axios.get('/orders.json')
-    .then(res => {
+    .then(response => {
       const fetchedOrders = [];
-      for (let key in res.data) {
+      for (let key in response.data) {
         fetchedOrders.push({
-          ...res.data[key],
+          ...response.data[key],
           id: key
         });
       }
       dispatch(fetchOrdersSuccess(fetchedOrders)) 
     })
-    .catch(err => {
-      dispatch(fetchOrdersFail(err))
+    .catch(error => {
+      dispatch(fetchOrdersFail(error))
     });
   }
 }
