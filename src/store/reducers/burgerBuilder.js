@@ -1,11 +1,11 @@
 import * as actionTypes from '../actions/actionTypes';
-import { updateObject } from '../utility';
+import { updateObject } from '../../shared/utility';
 
 const initialState = {
   ingredients: null,
   totalPrice: 1.25,
   error: false,
-  building: null
+  building: false
 };
 
 const INGREDIENT_PRICES = {
